@@ -1,0 +1,22 @@
+
+  
+  table {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  
+  td {
+    flex-grow: 1;
+  }
+
+ .product-box {
+  width: 100%;
+  max-width: 250px; /* Adjust this value as needed */
+  text-align: center;
+}
+
+.product-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
