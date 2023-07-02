@@ -10,6 +10,7 @@ import { State } from '../common/state';
 })
 export class Lizy2ShopFormService {
 
+
   private countriesUrl = 'http://localhost:8080/api/countries';
   private statesUrl = 'http://localhost:8080/api/states';
 
@@ -55,6 +56,10 @@ export class Lizy2ShopFormService {
     }
 
     return of(data);
+  }
+
+  getCreditcard() {
+    throw new Error('Method not implemented.');
   }
 }
 

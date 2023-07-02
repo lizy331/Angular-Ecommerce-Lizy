@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Form, FormBuilder, FormGroup } from '@angular/forms';
+import { Form, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Country } from 'src/app/common/country';
+import { Creditcard } from 'src/app/common/creditcard';
 import { State } from 'src/app/common/state';
+import { CartService } from 'src/app/services/cart.service';
 import { Lizy2ShopFormService } from 'src/app/services/lizy2-shop-form.service';
+import { Lizy2ShopValidators } from 'src/app/validators/lizy2-shop-validators';
 
 @Component({
   selector: 'app-checkout',
@@ -11,7 +14,8 @@ import { Lizy2ShopFormService } from 'src/app/services/lizy2-shop-form.service';
 })
 export class CheckoutComponent implements OnInit {
 
-  checkoutFormGroup!: FormGroup;
+
+  checkoutFormGroup: FormGroup = new FormGroup({});
   totalPrice: number = 0;
   totalQuantity: number = 0;
 
@@ -20,41 +24,68 @@ export class CheckoutComponent implements OnInit {
 
   countries: Country[] = [];
 
+  // we did not store the credit card information in database, hence here we are hard coding
+  defaultCreditCardTypes: string = "Visa";
+
   shippingAddressStates: State[] = [];
   billingAddressStates: State[] = [];
 
   constructor(private formBuilder: FormBuilder,
-              private lizy2ShopFormService: Lizy2ShopFormService) { }
+              private lizy2ShopFormService: Lizy2ShopFormService,
+              private cartService: CartService) { }
 
   ngOnInit(): void {
+
+    this.reviewCartDetails();
+
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
-        firstName: [''],
-        lastName: [''],
-        email: ['']
+        firstName: new FormControl('',[Validators.required,
+                                        Validators.minLength(2), 
+                                        Lizy2ShopValidators.notOnlyWhitespace]),
+
+        lastName: new FormControl('',[Validators.required,
+                                      Validators.minLength(2),
+                                      Lizy2ShopValidators.notOnlyWhitespace]),
+
+        email: new FormControl('',
+                            [Validators.required,
+                             Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+                             Lizy2ShopValidators.notOnlyWhitespace])
       }),
       shippingAddress: this.formBuilder.group({
-        street:[''],
-        city:[''],
-        state:[''],
-        country:[''],
-        zip:[''],
+        street:new FormControl('',[Validators.required,Validators.minLength(2),
+                                   Lizy2ShopValidators.notOnlyWhitespace]),
+        city: new FormControl('',[Validators.required,Validators.minLength(2),
+                                   Lizy2ShopValidators.notOnlyWhitespace]),
+        state: new FormControl('',[Validators.required]),
+        country: new FormControl('',[Validators.required]),
+        zip: new FormControl('',[Validators.required,Validators.minLength(2),
+          Lizy2ShopValidators.notOnlyWhitespace])
       }),
       billingAddress: this.formBuilder.group({
-        street:[''],
-        city:[''],
-        state:[''],
-        country:[''],
-        zip:[''],
+        street:new FormControl('',[Validators.required,Validators.minLength(2),
+                                    Lizy2ShopValidators.notOnlyWhitespace]),
+        city: new FormControl('',[Validators.required,Validators.minLength(2),
+                                  Lizy2ShopValidators.notOnlyWhitespace]),
+        state: new FormControl('',[Validators.required]),
+        country: new FormControl('',[Validators.required]),
+        zip: new FormControl('',[Validators.required,Validators.minLength(2),
+                                Lizy2ShopValidators.notOnlyWhitespace])
       }),
+
+
       creditCard: this.formBuilder.group({
-        cardType:[''],
-        nameOnCard:[''],
-        cardNumber:[''],
-        securityCode:[''],
+        cardType:new FormControl('',[Validators.required]),
+
+        nameOnCard:new FormControl('',[Validators.required,
+                                      Validators.minLength(2),
+                                      Lizy2ShopValidators.notOnlyWhitespace]),
+        cardNumber:new FormControl('',[Validators.required,Validators.pattern('[0-9]{16}')]),
+        securityCode:new FormControl('',[Validators.required,Validators.pattern('[0-9]{3}')]),
         expirationMonth:[''],
         expirationYear:['']
-      })
+      }),
     });
 
     // pupolate credit ard month
@@ -68,7 +99,7 @@ export class CheckoutComponent implements OnInit {
       }
     );
 
-    // populate redit card year
+    // populate credit card year
 
     this.lizy2ShopFormService.getCriditCardYears().subscribe(
       data => {
@@ -88,16 +119,56 @@ export class CheckoutComponent implements OnInit {
 
 
   }
+  reviewCartDetails() {
+    // subscribe to the cartService.totalQuantity
+    this.cartService.totalQuantity.subscribe(
+      data => this.totalQuantity = data
+    );
+
+    // subscribe to the cartService.totalPrice
+    this.cartService.totalPrice.subscribe(
+      data => this.totalPrice = data
+    );
+  }
   
 
   onSubmit(){
     console.log("handling submit button")
 
+
+    if(this.checkoutFormGroup.invalid){
+      this.checkoutFormGroup.markAllAsTouched();
+    }
+
     console.log(this.checkoutFormGroup.get('customer')?.value)
+    console.log("The email address is " + this.checkoutFormGroup.get('customer')?.value.email);
 
     console.log("the shipping address country is " + this.checkoutFormGroup.get('shippingAddress')?.value.country.name)
     console.log("the shipping address state is " + this.checkoutFormGroup.get('shippingAddress')?.value.state.name)
   }
+
+
+  get firstName() {return this.checkoutFormGroup.get('customer.firstName');}
+  get lastName() {return this.checkoutFormGroup.get('customer.lastName');}
+  get email() {return this.checkoutFormGroup.get('customer.email');}
+
+  get shippingAddressStreet(){return this.checkoutFormGroup.get('shippingAddress.street')}
+  get shippingAddressCity(){return this.checkoutFormGroup.get('shippingAddress.city')}
+  get shippingAddressState(){return this.checkoutFormGroup.get('shippingAddress.state')}
+  get shippingAddressZipCode(){return this.checkoutFormGroup.get('shippingAddress.zip')}
+  get shippingAddressCountry(){return this.checkoutFormGroup.get('shippingAddress.country')}
+
+  get billingAddressStreet(){return this.checkoutFormGroup.get('billingAddress.street')}
+  get billingAddressCity(){return this.checkoutFormGroup.get('billingAddress.city')}
+  get billingAddressState(){return this.checkoutFormGroup.get('billingAddress.state')}
+  get billingAddressZipCode(){return this.checkoutFormGroup.get('billingAddress.zip')}
+  get billingAddressCountry(){return this.checkoutFormGroup.get('billingAddress.country')}
+
+
+  get creditCardType(){return this.checkoutFormGroup.get('creditCard.cardType')}
+  get creditCardNameOnCard(){return this.checkoutFormGroup.get('creditCard.nameOnCard')}
+  get creditCardNumber(){return this.checkoutFormGroup.get('creditCard.cardNumber')}
+  get creditCardSecurityCode(){return this.checkoutFormGroup.get('creditCard.securityCode')}
 
   copyShippingAddressToBillingAddress(event: any){
 
@@ -162,5 +233,12 @@ export class CheckoutComponent implements OnInit {
     );
 
   }
+
+  // since we are not storing the credit card type information in our database, we need to hard code it
+  getCardType(formGroupName: string){
+    const formGroup = this.checkoutFormGroup.get(formGroupName);
+    formGroup?.get('cardType')?.setValue(this.defaultCreditCardTypes);
+  }
+
 
 }
