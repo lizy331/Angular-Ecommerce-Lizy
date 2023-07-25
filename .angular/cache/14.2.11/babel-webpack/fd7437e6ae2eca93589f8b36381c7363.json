@@ -1,0 +1,1 @@
+{"ast":null,"code":"var getBuiltIn = require('../internals/get-built-in');\n\nvar caller = require('../internals/caller');\n\nvar Map = getBuiltIn('Map');\nmodule.exports = {\n  Map: Map,\n  set: caller('set', 2),\n  get: caller('get', 1),\n  has: caller('has', 1),\n  remove: caller('delete', 1),\n  proto: Map.prototype\n};","map":null,"metadata":{},"sourceType":"script"}

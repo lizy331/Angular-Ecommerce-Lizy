@@ -1,0 +1,1 @@
+{"ast":null,"code":"var userAgent = require('../internals/engine-user-agent'); // eslint-disable-next-line redos/no-vulnerable -- safe\n\n\nmodule.exports = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent);","map":null,"metadata":{},"sourceType":"script"}

@@ -1,0 +1,1 @@
+{"ast":null,"code":"module.exports = function (methodName, numArgs) {\n  return numArgs == 1 ? function (object, arg) {\n    return object[methodName](arg);\n  } : function (object, arg1, arg2) {\n    return object[methodName](arg1, arg2);\n  };\n};","map":null,"metadata":{},"sourceType":"script"}

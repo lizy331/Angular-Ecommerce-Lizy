@@ -1,0 +1,1 @@
+{"ast":null,"code":"var userAgent = require('../internals/engine-user-agent');\n\nmodule.exports = /ipad|iphone|ipod/i.test(userAgent) && typeof Pebble != 'undefined';","map":null,"metadata":{},"sourceType":"script"}

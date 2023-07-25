@@ -1,0 +1,1 @@
+{"ast":null,"code":"var iterateSimple = require('../internals/iterate-simple');\n\nmodule.exports = function (map, fn, interruptible) {\n  return interruptible ? iterateSimple(map.entries(), function (entry) {\n    return fn(entry[1], entry[0]);\n  }) : map.forEach(fn);\n};","map":null,"metadata":{},"sourceType":"script"}

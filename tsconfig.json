@@ -13,6 +13,7 @@
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
+    "noImplicitAny": false,
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
@@ -22,6 +23,7 @@
     ]
   },
   "angularCompilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,

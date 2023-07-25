@@ -1,0 +1,1 @@
+{"ast":null,"code":"module.exports = function (a, b) {\n  try {\n    // eslint-disable-next-line no-console -- safe\n    arguments.length == 1 ? console.error(a) : console.error(a, b);\n  } catch (error) {\n    /* empty */\n  }\n};","map":null,"metadata":{},"sourceType":"script"}

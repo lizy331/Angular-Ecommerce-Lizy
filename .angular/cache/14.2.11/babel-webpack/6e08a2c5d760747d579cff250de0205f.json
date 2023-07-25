@@ -1,0 +1,1 @@
+{"ast":null,"code":"require('./url-search-params');\n\nrequire('../modules/web.url');\n\nrequire('../modules/web.url.can-parse');\n\nrequire('../modules/web.url.to-json');\n\nvar path = require('../internals/path');\n\nmodule.exports = path.URL;","map":null,"metadata":{},"sourceType":"script"}

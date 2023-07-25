@@ -1,0 +1,1 @@
+{"ast":null,"code":"var call = require('../internals/function-call');\n\nmodule.exports = function (iterator, fn, $next) {\n  var next = $next || iterator.next;\n  var step, result;\n\n  while (!(step = call(next, iterator)).done) {\n    result = fn(step.value);\n    if (result !== undefined) return result;\n  }\n};","map":null,"metadata":{},"sourceType":"script"}

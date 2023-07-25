@@ -1,0 +1,1 @@
+{"ast":null,"code":"var parent = require('../../stable/symbol');\n\nrequire('../../modules/esnext.function.metadata');\n\nrequire('../../modules/esnext.symbol.dispose');\n\nrequire('../../modules/esnext.symbol.metadata');\n\nmodule.exports = parent;","map":null,"metadata":{},"sourceType":"script"}
