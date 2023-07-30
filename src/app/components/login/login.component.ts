@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   oktaSignin: any;
 
-  constructor(@Inject(OKTA_AUTH) private oktaAuth:OktaAuth) { 
+  constructor(@Inject(OKTA_AUTH) public oktaAuth: OktaAuth) { 
 
     //  
     console.log("login component contructor method started ")
@@ -47,7 +47,8 @@ export class LoginComponent implements OnInit {
 
     console.log("login component ngOnInit method triggered, try to remove the oktaSin");
     this.oktaSignin.remove();
-
+    console.log("login component ngOnInit method, removed the oktaSin");
+    
     this.oktaSignin.renderEl({
       el: '#okta-sign-in-widget'}, // this name should be same as the html file
       (response: any) => {

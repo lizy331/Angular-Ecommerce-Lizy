@@ -30,3 +30,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 # Angular-Ecommerce-Lizy
 Angular project for online book selling
 >>>>>>> Initial commit
+
+
+
+build run build.sh
